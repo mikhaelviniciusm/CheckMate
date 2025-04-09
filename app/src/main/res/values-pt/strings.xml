@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Checkmate</string>
+    <string name="settings">Configurações</string>
+    <string name="force_dark_mode">Forçar modo escuro</string>
+    <string name="language">Idioma</string>
+    <string name="clear_all_tasks">Limpar todas as tarefas</string>
+    <string name="select_language">Selecionar idioma</string>
+    <string name="cancel">Cancelar</string>
+    <string name="dark_mode_icon">Ícone modo escuro</string>
+    <string name="language_icon">Ícone linguagem</string>
+    <string name="clear_all_tasks_icon">Ícone limpar todas as tarefas</string>
+</resources>
