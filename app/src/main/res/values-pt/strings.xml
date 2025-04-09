@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Checkmate</string>
+    <string name="app_name">CheckMate</string>
     <string name="settings">Configurações</string>
     <string name="force_dark_mode">Forçar modo escuro</string>
     <string name="language">Idioma</string>
