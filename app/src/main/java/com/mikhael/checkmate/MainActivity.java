@@ -34,6 +34,10 @@ public class MainActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        // Configura a cor da barra de navegação
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_theme_surfaceContainer));
+
+
         // Configura insets do sistema, AppBar e campo de entrada
         configureWindowInsets();
         configureTopAppBar();
