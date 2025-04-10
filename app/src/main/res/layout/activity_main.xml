@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_theme_surface"
     tools:context=".MainActivity">
 
+    <!-- AppBarLayout com Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/mainTopAppBar"
@@ -21,7 +20,76 @@
             android:minHeight="?attr/actionBarSize"
             app:menu="@menu/top_app_bar"
             app:title="CheckMate" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Área principal do layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- Outros elementos do layout podem ser adicionados aqui -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- BottomAppBar com TextInputLayout -->
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/md_theme_surfaceContainer"
+        app:fabAlignmentMode="center"
+        app:hideOnScroll="true">
+
+        <!-- Campo de entrada de texto -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/task_to_be_added"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            app:boxBackgroundColor="@color/md_theme_surfaceContainerHigh"
+            app:boxBackgroundMode="filled"
+            app:boxStrokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Campo de texto para entrada -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputField"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_edittext_background"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textColor="@color/md_theme_onSurface" />
+
+                <!-- Botão de confirmação -->
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="@color/md_theme_primary">
+
+                    <ImageButton
+                        android:id="@+id/checkButton"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/check_icon"
+                        android:src="@drawable/check_24px"
+                        android:visibility="gone"
+                        app:tint="@color/md_theme_onPrimary" />
+                </FrameLayout>
+            </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
