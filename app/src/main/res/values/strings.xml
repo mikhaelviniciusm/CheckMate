@@ -9,4 +9,6 @@
     <string name="dark_mode_icon">Dark mode icon</string>
     <string name="language_icon">Language icon</string>
     <string name="clear_all_tasks_icon">Clear all tasks icon</string>
+    <string name="task_to_be_added">Task to be added</string>
+    <string name="check_icon">Check icon</string>
 </resources>

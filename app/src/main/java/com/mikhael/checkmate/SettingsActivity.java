@@ -21,51 +21,55 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Get the shared preferences
+        // Obtém as preferências compartilhadas
         SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
 
-        // Get the saved language preference
-        String language = preferences.getString("language", "pt");
-
-        // Set the locale to the saved language
-        setLocale(language);
+        // Define o idioma com base na preferência salva
+        setLocale(preferences.getString("language", "pt"));
 
         super.onCreate(savedInstanceState);
+
+        // Configura o layout e habilita o comportamento Edge-to-Edge
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
 
+        // Ajusta o padding para evitar sobreposição com as barras do sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Configura a barra de navegação superior
+        setupToolbar();
+
+        // Configura o switch de tema
+        setupThemeSwitch(preferences);
+    }
+
+    // Configura a barra de navegação superior
+    private void setupToolbar() {
         androidx.appcompat.widget.Toolbar settingsTopAppBar = findViewById(R.id.arrowBack);
-        settingsTopAppBar.setNavigationOnClickListener(v -> {
-            finish();
-        });
+        settingsTopAppBar.setNavigationOnClickListener(v -> finish());
+    }
 
+    // Configura o switch de tema para alternar entre modo claro e escuro
+    private void setupThemeSwitch(SharedPreferences preferences) {
         MaterialSwitch themeSwitch = findViewById(R.id.themeSwitch);
+        themeSwitch.setChecked(preferences.getBoolean("dark_mode", false));
 
-        // Check if dark mode is enabled on the device
-        boolean isDarkModeEnabled = preferences.getBoolean("dark_mode", false);
-        themeSwitch.setChecked(isDarkModeEnabled);
-
-        // Set the theme based on the saved preference
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("dark_mode", isChecked);
-            editor.apply();
+            // Salva a preferência de tema
+            preferences.edit().putBoolean("dark_mode", isChecked).apply();
 
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            }
+            // Aplica o tema com base na preferência
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            );
         });
     }
 
-    // Method to set the locale based on the selected language
+    // Define o idioma com base no código de idioma selecionado
     private void setLocale(String languageCode) {
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
@@ -76,32 +80,36 @@ public class SettingsActivity extends BaseActivity {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    // Method to handle the language selection
+    // Trata a seleção de idioma
     public void onLanguageClick(View view) {
         String[] languages = {"Português", "English"};
         SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
-        String currentLanguage = preferences.getString("language", "pt");
-        int checkedItem = currentLanguage.equals("pt") ? 0 : 1;
+        int checkedItem = preferences.getString("language", "pt").equals("pt") ? 0 : 1;
 
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.select_language))
                 .setSingleChoiceItems(languages, checkedItem, (dialog, which) -> {
-                    SharedPreferences.Editor editor = preferences.edit();
+                    // Salva a nova preferência de idioma
                     String selectedLanguage = which == 0 ? "pt" : "en";
-                    editor.putString("language", selectedLanguage);
-                    editor.apply();
+                    preferences.edit().putString("language", selectedLanguage).apply();
 
-                    // Restart the app to apply the new language
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
+                    // Reinicia o app para aplicar o novo idioma
+                    restartApp();
                 })
                 .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
+    // Reinicia o aplicativo para aplicar alterações de idioma
+    private void restartApp() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    // Trata o clique no item "Clear all tasks" (implementação futura)
     public void onClearTasksClick(View view) {
-        // Lógica para tratar o clique no item "Clear all tasks"
+        // TODO: Implementar funcionalidade para limpar todas as tarefas
     }
 }

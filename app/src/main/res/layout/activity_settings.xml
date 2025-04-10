@@ -5,8 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_theme_surface"
     tools:context=".SettingsActivity">
 
+    <!-- AppBar com Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -22,9 +24,9 @@
             android:minHeight="?attr/actionBarSize"
             app:navigationIcon="@drawable/arrow_back_24px"
             app:title="@string/settings" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Conteúdo principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,9 +34,9 @@
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
-        <!-- Item 1: Dark mode -->
+        <!-- Configuração: Modo escuro -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,7 +66,7 @@
                 android:checked="false" />
         </LinearLayout>
 
-        <!-- Item 2: Language -->
+        <!-- Configuração: Idioma -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,7 +93,7 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <!-- Item 3: Clear all tasks -->
+        <!-- Configuração: Limpar todas as tarefas -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,7 +119,5 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp" />
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CheckMate</string>
     <string name="settings">Configurações</string>
@@ -9,4 +10,6 @@
     <string name="dark_mode_icon">Ícone modo escuro</string>
     <string name="language_icon">Ícone linguagem</string>
     <string name="clear_all_tasks_icon">Ícone limpar todas as tarefas</string>
+    <string name="task_to_be_added">Tarefa a ser adicionada</string>
+    <string name="check_icon">Ícone check</string>
 </resources>
