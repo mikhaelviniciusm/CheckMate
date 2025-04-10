@@ -68,6 +68,7 @@
                     android:background="@drawable/rounded_edittext_background"
                     android:inputType="text"
                     android:padding="12dp"
+                    android:hint="@string/task_to_be_added"
                     android:textColor="@color/md_theme_onSurface" />
 
                 <!-- Botão de confirmação -->
