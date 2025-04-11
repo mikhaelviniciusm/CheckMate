@@ -37,9 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:backgroundTint="@color/md_theme_surfaceContainer"
-        app:fabAlignmentMode="center"
-        app:hideOnScroll="true">
+        app:backgroundTint="@color/md_theme_surfaceContainer">
 
         <!-- Campo de entrada de texto -->
         <com.google.android.material.textfield.TextInputLayout
