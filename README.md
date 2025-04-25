@@ -4,15 +4,20 @@ Este é um aplicativo simples para gerenciamento de tarefas, onde você pode adi
 
 Funcionalidades:
 
-  ✔️ Adicionar tarefas
-  ✔️  Marcar tarefas como concluídas
-  ✔️  Alternar entre modo claro e modo escuro
-  ✔️  Armazenamento de tarefas em banco de dados local
+    ✔️ Adicionar tarefas
+  
+    ✔️  Marcar tarefas como concluídas
+  
+    ✔️  Alternar entre modo claro e modo escuro
+  
+    ✔️  Armazenamento de tarefas em banco de dados local
 
 O app utiliza o padrão de arquitetura MVC (Model-View-Controller), o que facilita a manutenção e a expansão do sistema.
 
 Tecnologias utilizadas:
 
-  💻 Android Studio
-  💻 SQLite para armazenamento local
-  💻 Java para a lógica do aplicativo 
+    💻 Android Studio
+
+    💻 SQLite para armazenamento local
+
+    💻 Java para a lógica do aplicativo 
