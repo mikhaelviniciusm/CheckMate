@@ -26,12 +26,60 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="56dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Outros elementos do layout podem ser adicionados aqui -->
+        <!-- ScrollView para exibir as tarefas -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="40dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Seção de Tarefas Pendentes -->
+                <TextView
+                    android:id="@+id/pendingTasksLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/pending"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/pendingTasksContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+
+                <!-- Seção de Tarefas Concluídas -->
+                <TextView
+                    android:id="@+id/completedTasksLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/completed"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/completedTasksContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- BottomAppBar com TextInputLayout -->
+    <!-- BottomAppBar com campo de entrada de texto -->
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
@@ -39,7 +87,7 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@color/md_theme_surfaceContainer">
 
-        <!-- Campo de entrada de texto -->
+        <!-- TextInputLayout para adicionar tarefas -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,9 +112,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/rounded_edittext_background"
+                    android:hint="@string/task_to_be_added"
                     android:inputType="text"
                     android:padding="12dp"
-                    android:hint="@string/task_to_be_added"
                     android:textColor="@color/md_theme_onSurface" />
 
                 <!-- Botão de confirmação -->
