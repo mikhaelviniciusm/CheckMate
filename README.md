@@ -9,7 +9,7 @@ Este é um aplicativo simples para gerenciamento de tarefas, onde você pode adi
 ✔️ Editar ou excluir tarefas existentes  
 ✔️ Alternar entre modo claro e modo escuro  
 ✔️ Armazenamento de tarefas em banco de dados local  
-✔️ Alterar o idioma do aplicativo (Atualmente apenas Português e Inglês)  
+✔️ Alterar o idioma do aplicativo (Português e Inglês)  
 ✔️ Excluir todas as tarefas com um clique  
 
 ## Tecnologias Utilizadas
