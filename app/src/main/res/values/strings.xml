@@ -11,4 +11,8 @@
     <string name="clear_all_tasks_icon">Clear all tasks icon</string>
     <string name="task_to_be_added">Task to be added</string>
     <string name="check_icon">Check icon</string>
+    <string name="pending">Pending</string>
+    <string name="completed">Completed</string>
+    <string name="confirm">Confirm</string>
+    <string name="clear_all_tasks_confirmation">Are you sure you want to delete all tasks? This action cannot be undone.</string>
 </resources>
