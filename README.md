@@ -49,7 +49,7 @@ O aplicativo utiliza o padrão de arquitetura **MVC (Model-View-Controller)**, o
 - **Marcar como Concluída**: Toque na tarefa para marcá-la como concluída ou desmarcá-la.  
 - **Editar ou Excluir Tarefas**: Segure em cima de uma tarefa para editar ou excluí-la.  
 - **Forçar tema escuro**: Vá para as configurações e ative a chave da função.  
-- **Alterar Idioma**: CLique na opção idioma presente nas configurações e escolha entre Português e Inglês.  
+- **Alterar Idioma**: Clique na opção idioma presente nas configurações e escolha entre Português e Inglês.  
 - **Excluir Todas as Tarefas**: Use a opção de limpar todas as tarefas para começar do zero.  
 
 ## Contribuidores
