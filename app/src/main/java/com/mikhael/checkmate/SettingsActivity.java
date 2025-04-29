@@ -60,8 +60,6 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Configura o switch de tema (modo claro/escuro).
-     *
-     * @param preferences Preferências do usuário.
      */
     private void setupThemeSwitch(SharedPreferences preferences) {
         MaterialSwitch themeSwitch = findViewById(R.id.themeSwitch);
@@ -80,8 +78,6 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Define o idioma do aplicativo.
-     *
-     * @param languageCode Código do idioma (ex.: "pt" ou "en").
      */
     private void setLocale(String languageCode) {
         Locale locale = new Locale(languageCode);
@@ -95,8 +91,6 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Exibe o diálogo para seleção de idioma.
-     *
-     * @param view View que acionou o evento.
      */
     public void onLanguageClick(View view) {
         String[] languages = {"Português", "English"};
@@ -129,8 +123,6 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Exibe o diálogo para confirmação de exclusão de todas as tarefas.
-     *
-     * @param view View que acionou o evento.
      */
     public void onClearTasksClick(View view) {
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
