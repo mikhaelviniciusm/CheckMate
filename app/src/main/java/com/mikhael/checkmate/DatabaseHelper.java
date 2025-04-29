@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, NOME_BANCO, null, VERSAO_BANCO);
     }
 
-    // Método chamado ao criar o banco de dados pela primeira vez.
+    // Chamado ao criar o banco de dados pela primeira vez.
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Comando SQL para criar a tabela
@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CRIAR_TABELA); // Executa o comando SQL
     }
 
-    // Método chamado ao atualizar o banco de dados para uma nova versão.
+    // Chamado ao atualizar o banco de dados para uma nova versão.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Remove a tabela existente, se houver
