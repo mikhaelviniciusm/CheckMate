@@ -179,6 +179,9 @@ public class MainActivity extends BaseActivity {
         completedTasksContainer.removeAllViews();
 
         // Itera sobre as tarefas no banco de dados
+        boolean isFirstPending = true;
+        boolean isFirstCompleted = true;
+
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela._ID));
             String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela.Descricao));
@@ -197,8 +200,16 @@ public class MainActivity extends BaseActivity {
 
             // Adiciona a tarefa ao contêiner apropriado
             if (status == 0) {
+                if (!isFirstPending) {
+                    pendingTasksContainer.addView(createDivider());
+                }
+                isFirstPending = false;
                 pendingTasksContainer.addView(taskCheckBox);
             } else {
+                if (!isFirstCompleted) {
+                    completedTasksContainer.addView(createDivider());
+                }
+                isFirstCompleted = false;
                 taskCheckBox.setPaintFlags(taskCheckBox.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 completedTasksContainer.addView(taskCheckBox);
             }
@@ -209,6 +220,21 @@ public class MainActivity extends BaseActivity {
         completedTasksLabel.setVisibility(completedTasksContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE);
 
         cursor.close();
+    }
+
+    /**
+     * Cria uma View que atua como um divisor entre os itens.
+     */
+    private View createDivider() {
+        View divider = new View(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                1 // Altura do divisor
+        );
+        params.setMargins(0, 24, 0, 24); // Margens superior e inferior
+        divider.setLayoutParams(params);
+        divider.setBackgroundColor(ContextCompat.getColor(this, R.color.md_theme_outline)); // Cor do divisor
+        return divider;
     }
 
     /**
