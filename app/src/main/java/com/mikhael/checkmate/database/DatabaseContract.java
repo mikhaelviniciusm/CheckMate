@@ -1,4 +1,4 @@
-package com.mikhael.checkmate;
+package com.mikhael.checkmate.database;
 
 import android.provider.BaseColumns;
 

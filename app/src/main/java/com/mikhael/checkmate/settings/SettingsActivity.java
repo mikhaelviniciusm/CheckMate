@@ -1,4 +1,4 @@
-package com.mikhael.checkmate;
+package com.mikhael.checkmate.settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +15,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.mikhael.checkmate.BaseActivity;
+import com.mikhael.checkmate.R;
+import com.mikhael.checkmate.database.DatabaseContract;
+import com.mikhael.checkmate.database.DatabaseHelper;
+import com.mikhael.checkmate.main.MainActivity;
 
 import java.util.Locale;
 

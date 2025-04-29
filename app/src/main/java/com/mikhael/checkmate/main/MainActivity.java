@@ -1,4 +1,4 @@
-package com.mikhael.checkmate;
+package com.mikhael.checkmate.main;
 
 import android.animation.ValueAnimator;
 import android.content.ContentValues;
@@ -26,6 +26,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.mikhael.checkmate.BaseActivity;
+import com.mikhael.checkmate.R;
+import com.mikhael.checkmate.settings.SettingsActivity;
+import com.mikhael.checkmate.database.DatabaseContract;
+import com.mikhael.checkmate.database.DatabaseHelper;
 
 import java.util.Locale;
 

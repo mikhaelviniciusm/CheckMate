@@ -24,10 +24,6 @@ public class BaseActivity extends AppCompatActivity {
 
     /**
      * Aplica o idioma especificado ao contexto.
-     *
-     * @param context      Contexto atual.
-     * @param languageCode Código do idioma (ex.: "en", "pt").
-     * @return Contexto atualizado com o idioma configurado.
      */
     private Context applyLocale(Context context, String languageCode) {
         Locale locale = new Locale(languageCode);
