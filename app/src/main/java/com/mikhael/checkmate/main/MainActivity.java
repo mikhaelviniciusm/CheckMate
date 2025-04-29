@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity {
         SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
 
         // Configura o idioma
-        setLocale(preferences.getString("language", "en"));
+        setLocale(preferences.getString("language", "pt"));
 
         // Configura o tema (modo claro/escuro)
         AppCompatDelegate.setDefaultNightMode(
