@@ -17,15 +17,15 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        SharedPreferences preferences = newBase.getSharedPreferences("settings", MODE_PRIVATE);
-        String language = preferences.getString("language", "pt"); // Idioma padrão: português
+        SharedPreferences preferences = newBase.getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        String language = preferences.getString(Constants.KEY_LANGUAGE, Constants.DEFAULT_LANGUAGE);
         super.attachBaseContext(applyLocale(newBase, language));
     }
 
     /**
      * Aplica o idioma especificado ao contexto.
      */
-    private Context applyLocale(Context context, String languageCode) {
+    protected Context applyLocale(Context context, String languageCode) {
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
 
@@ -34,5 +34,22 @@ public class BaseActivity extends AppCompatActivity {
         config.setLocale(locale);
 
         return context.createConfigurationContext(config);
+    }
+
+    /**
+     * Altera o idioma da atividade atual e recria a atividade para aplicar as mudanças.
+     */
+    protected void setLocale(String languageCode) {
+        SharedPreferences preferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        String currentLanguage = preferences.getString(Constants.KEY_LANGUAGE, Constants.DEFAULT_LANGUAGE);
+
+        if (!currentLanguage.equals(languageCode)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Constants.KEY_LANGUAGE, languageCode);
+            editor.apply();
+
+            applyLocale(this, languageCode);
+            recreate();
+        }
     }
 }

@@ -2,8 +2,6 @@ package com.mikhael.checkmate.settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -21,8 +19,6 @@ import com.mikhael.checkmate.database.DatabaseContract;
 import com.mikhael.checkmate.database.DatabaseHelper;
 import com.mikhael.checkmate.main.MainActivity;
 
-import java.util.Locale;
-
 /**
  * Activity de configurações do aplicativo.
  * Permite alterar idioma, tema e limpar todas as tarefas do banco de dados.
@@ -35,7 +31,7 @@ public class SettingsActivity extends BaseActivity {
         SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
 
         // Define o idioma com base nas preferências
-        setLocale(preferences.getString("language", "pt"));
+        super.setLocale(preferences.getString("language", "pt"));
 
         super.onCreate(savedInstanceState);
 
@@ -82,31 +78,20 @@ public class SettingsActivity extends BaseActivity {
     }
 
     /**
-     * Define o idioma do aplicativo.
-     */
-    private void setLocale(String languageCode) {
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-
-        Resources resources = getResources();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-    }
-
-    /**
      * Exibe o diálogo para seleção de idioma.
      */
     public void onLanguageClick(View view) {
-        String[] languages = {"Português", "English"};
+        String[] languages = getResources().getStringArray(R.array.languages);
+        String[] languageCodes = getResources().getStringArray(R.array.language_codes);
         SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
-        int checkedItem = preferences.getString("language", "pt").equals("pt") ? 0 : 1;
+        String currentLanguage = preferences.getString("language", "pt");
+        int checkedItem = java.util.Arrays.asList(languageCodes).indexOf(currentLanguage);
 
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.select_language))
                 .setSingleChoiceItems(languages, checkedItem, (dialog, which) -> {
                     // Salva o idioma selecionado
-                    String selectedLanguage = which == 0 ? "pt" : "en";
+                    String selectedLanguage = languageCodes[which];
                     preferences.edit().putString("language", selectedLanguage).apply();
 
                     // Reinicia o aplicativo para aplicar o idioma

@@ -15,4 +15,16 @@
     <string name="completed">Completed</string>
     <string name="confirm">Confirm</string>
     <string name="clear_all_tasks_confirmation">Are you sure you want to delete all tasks? This action cannot be undone.</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="save">Save</string>
+    <string-array name="languages">
+        <item>Português</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="language_codes">
+        <item>pt</item>
+        <item>en</item>
+    </string-array>
 </resources>

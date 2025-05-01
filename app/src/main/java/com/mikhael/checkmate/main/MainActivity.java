@@ -4,8 +4,6 @@ import android.animation.ValueAnimator;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
@@ -27,12 +25,11 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mikhael.checkmate.BaseActivity;
+import com.mikhael.checkmate.Constants;
 import com.mikhael.checkmate.R;
-import com.mikhael.checkmate.settings.SettingsActivity;
 import com.mikhael.checkmate.database.DatabaseContract;
 import com.mikhael.checkmate.database.DatabaseHelper;
-
-import java.util.Locale;
+import com.mikhael.checkmate.settings.SettingsActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -62,14 +59,14 @@ public class MainActivity extends BaseActivity {
      * Configura o idioma, tema e aplica cores dinâmicas.
      */
     private void configureLocaleAndTheme() {
-        SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
 
         // Configura o idioma
-        setLocale(preferences.getString("language", "pt"));
+        super.setLocale(preferences.getString(Constants.KEY_LANGUAGE, Constants.DEFAULT_LANGUAGE));
 
         // Configura o tema (modo claro/escuro)
         AppCompatDelegate.setDefaultNightMode(
-                preferences.getBoolean("dark_mode", false)
+                preferences.getBoolean(Constants.KEY_DARK_MODE, false)
                         ? AppCompatDelegate.MODE_NIGHT_YES
                         : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         );
@@ -151,80 +148,88 @@ public class MainActivity extends BaseActivity {
      * Adiciona uma tarefa ao banco de dados e atualiza a lista de tarefas.
      */
     private void addTaskToDatabase(String description) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DatabaseContract.Tabela.Descricao, description);
-        values.put(DatabaseContract.Tabela.Status, 0); // Status pendente
-        db.insert(DatabaseContract.Tabela.NOME_TABELA, null, values);
-        loadTasksFromDatabase();
+        try (SQLiteDatabase db = databaseHelper.getWritableDatabase()) {
+            ContentValues values = new ContentValues();
+            values.put(DatabaseContract.Tabela.Descricao, description);
+            values.put(DatabaseContract.Tabela.Status, 0);
+            db.insert(DatabaseContract.Tabela.NOME_TABELA, null, values);
+            loadTasksFromDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Carrega as tarefas do banco de dados e atualiza a interface do usuário.
      */
     private void loadTasksFromDatabase() {
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cursor = db.query(
-                DatabaseContract.Tabela.NOME_TABELA,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        try (SQLiteDatabase db = databaseHelper.getReadableDatabase();
+             Cursor cursor = db.query(
+                     DatabaseContract.Tabela.NOME_TABELA,
+                     null,
+                     null,
+                     null,
+                     null,
+                     null,
+                     null
+             )) {
 
-        LinearLayout pendingTasksContainer = findViewById(R.id.pendingTasksContainer);
-        LinearLayout completedTasksContainer = findViewById(R.id.completedTasksContainer);
-        TextView pendingTasksLabel = findViewById(R.id.pendingTasksLabel);
-        TextView completedTasksLabel = findViewById(R.id.completedTasksLabel);
+            LinearLayout pendingTasksContainer = findViewById(R.id.pendingTasksContainer);
+            LinearLayout completedTasksContainer = findViewById(R.id.completedTasksContainer);
+            TextView pendingTasksLabel = findViewById(R.id.pendingTasksLabel);
+            TextView completedTasksLabel = findViewById(R.id.completedTasksLabel);
 
-        // Limpa os contêineres antes de recarregar as tarefas
-        pendingTasksContainer.removeAllViews();
-        completedTasksContainer.removeAllViews();
+            // Limpa os contêineres antes de recarregar as tarefas
+            pendingTasksContainer.removeAllViews();
+            completedTasksContainer.removeAllViews();
 
-        // Itera sobre as tarefas no banco de dados
-        boolean isFirstPending = true;
-        boolean isFirstCompleted = true;
+            boolean isFirstPending = true;
+            boolean isFirstCompleted = true;
 
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela._ID));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela.Descricao));
-            int status = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela.Status));
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela._ID));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela.Descricao));
+                int status = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Tabela.Status));
 
-            CheckBox taskCheckBox = new CheckBox(this);
-            taskCheckBox.setText(description);
-            taskCheckBox.setChecked(status == 1);
-            taskCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> updateTaskStatus(id, isChecked));
+                CheckBox taskCheckBox = createTaskCheckBox(id, description, status);
 
-            // Configura o menu de opções ao pressionar longamente
-            taskCheckBox.setOnLongClickListener(v -> {
-                showTaskOptionsMenu(id, description, taskCheckBox);
-                return true;
-            });
-
-            // Adiciona a tarefa ao contêiner apropriado
-            if (status == 0) {
-                if (!isFirstPending) {
-                    pendingTasksContainer.addView(createDivider());
+                if (status == 0) {
+                    if (!isFirstPending) {
+                        pendingTasksContainer.addView(createDivider());
+                    }
+                    isFirstPending = false;
+                    pendingTasksContainer.addView(taskCheckBox);
+                } else {
+                    if (!isFirstCompleted) {
+                        completedTasksContainer.addView(createDivider());
+                    }
+                    isFirstCompleted = false;
+                    taskCheckBox.setPaintFlags(taskCheckBox.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    completedTasksContainer.addView(taskCheckBox);
                 }
-                isFirstPending = false;
-                pendingTasksContainer.addView(taskCheckBox);
-            } else {
-                if (!isFirstCompleted) {
-                    completedTasksContainer.addView(createDivider());
-                }
-                isFirstCompleted = false;
-                taskCheckBox.setPaintFlags(taskCheckBox.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                completedTasksContainer.addView(taskCheckBox);
             }
+
+            // Atualiza a visibilidade dos rótulos
+            pendingTasksLabel.setVisibility(pendingTasksContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE);
+            completedTasksLabel.setVisibility(completedTasksContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        // Atualiza a visibilidade dos rótulos
-        pendingTasksLabel.setVisibility(pendingTasksContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE);
-        completedTasksLabel.setVisibility(completedTasksContainer.getChildCount() > 0 ? View.VISIBLE : View.GONE);
-
-        cursor.close();
+    /**
+     * Cria um CheckBox para uma tarefa.
+     */
+    private CheckBox createTaskCheckBox(int id, String description, int status) {
+        CheckBox taskCheckBox = new CheckBox(this);
+        taskCheckBox.setText(description);
+        taskCheckBox.setChecked(status == 1);
+        taskCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> updateTaskStatus(id, isChecked));
+        taskCheckBox.setOnLongClickListener(v -> {
+            showTaskOptionsMenu(id, description, taskCheckBox);
+            return true;
+        });
+        return taskCheckBox;
     }
 
     /**
@@ -247,13 +252,13 @@ public class MainActivity extends BaseActivity {
      */
     private void showTaskOptionsMenu(int taskId, String currentDescription, CheckBox taskCheckBox) {
         android.widget.PopupMenu popupMenu = new android.widget.PopupMenu(this, taskCheckBox);
-        popupMenu.getMenu().add("Editar");
-        popupMenu.getMenu().add("Excluir");
+        popupMenu.getMenu().add(R.string.edit);
+        popupMenu.getMenu().add(R.string.delete);
 
         popupMenu.setOnMenuItemClickListener(item -> {
-            if (item.getTitle().equals("Editar")) {
+            if (item.getTitle().equals(R.string.edit)) {
                 showEditTaskDialog(taskId, currentDescription);
-            } else if (item.getTitle().equals("Excluir")) {
+            } else if (item.getTitle().equals(R.string.delete)) {
                 deleteTaskFromDatabase(taskId);
             }
             return true;
@@ -268,7 +273,7 @@ public class MainActivity extends BaseActivity {
     private void showEditTaskDialog(int taskId, String currentDescription) {
         com.google.android.material.dialog.MaterialAlertDialogBuilder builder =
                 new com.google.android.material.dialog.MaterialAlertDialogBuilder(this);
-        builder.setTitle("Editar Tarefa");
+        builder.setTitle(R.string.edit_task);
 
         final TextInputEditText input = new TextInputEditText(this);
         input.setText(currentDescription);
@@ -284,14 +289,14 @@ public class MainActivity extends BaseActivity {
 
         builder.setView(container);
 
-        builder.setPositiveButton("Salvar", (dialog, which) -> {
+        builder.setPositiveButton(R.string.save, (dialog, which) -> {
             String newDescription = input.getText().toString().trim();
             if (!newDescription.isEmpty()) {
                 updateTaskDescription(taskId, newDescription);
             }
         });
 
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -346,11 +351,11 @@ public class MainActivity extends BaseActivity {
      * Anima a visibilidade do botão (mostrar/ocultar).
      */
     private void animateButtonVisibility(ImageButton button, boolean show) {
-        if (show) {
+        if (show && button.getVisibility() != View.VISIBLE) {
+            button.setVisibility(View.VISIBLE);
             button.setAlpha(0f);
             button.setScaleX(0f);
             button.setScaleY(0f);
-            button.setVisibility(View.VISIBLE);
 
             button.animate()
                     .alpha(1f)
@@ -359,18 +364,14 @@ public class MainActivity extends BaseActivity {
                     .setDuration(300)
                     .setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator())
                     .start();
-        } else {
+        } else if (!show && button.getVisibility() == View.VISIBLE) {
             button.animate()
+                    .alpha(0f)
                     .scaleX(0f)
                     .scaleY(0f)
-                    .alpha(0f)
                     .setDuration(300)
                     .setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator())
-                    .withEndAction(() -> {
-                        button.setVisibility(View.GONE);
-                        button.setScaleX(1f);
-                        button.setScaleY(1f);
-                    })
+                    .withEndAction(() -> button.setVisibility(View.GONE))
                     .start();
         }
     }
@@ -379,26 +380,16 @@ public class MainActivity extends BaseActivity {
      * Anima a largura do campo de entrada.
      */
     private void animateInputFieldWidth(TextInputEditText inputField, int fromWidth, int toWidth) {
-        ValueAnimator animator = ValueAnimator.ofInt(fromWidth, toWidth);
-        animator.addUpdateListener(animation -> {
-            inputField.getLayoutParams().width = (int) animation.getAnimatedValue();
-            inputField.requestLayout();
-        });
-        animator.setDuration(300);
-        animator.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
-        animator.start();
-    }
-
-    /**
-     * Define o idioma da aplicação com base no código de idioma fornecido.
-     */
-    private void setLocale(String languageCode) {
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-
-        Resources resources = getResources();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
+        if (fromWidth != toWidth) {
+            ValueAnimator animator = ValueAnimator.ofInt(fromWidth, toWidth);
+            animator.addUpdateListener(animation -> {
+                int animatedValue = (int) animation.getAnimatedValue();
+                inputField.getLayoutParams().width = animatedValue;
+                inputField.requestLayout();
+            });
+            animator.setDuration(300);
+            animator.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
+            animator.start();
+        }
     }
 }

@@ -16,4 +16,8 @@
     <string name="completed">Concluídas</string>
     <string name="confirm">Confirmar</string>
     <string name="clear_all_tasks_confirmation">Tem certeza de que deseja excluir todas as tarefas? Esta ação não pode ser desfeita.</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Excluir</string>
+    <string name="edit_task">Editar Tarefa</string>
+    <string name="save">Salvar</string>
 </resources>
