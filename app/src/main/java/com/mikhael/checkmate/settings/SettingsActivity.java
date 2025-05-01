@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.mikhael.checkmate.BaseActivity;
+import com.mikhael.checkmate.Constants;
 import com.mikhael.checkmate.R;
 import com.mikhael.checkmate.database.DatabaseContract;
 import com.mikhael.checkmate.database.DatabaseHelper;
@@ -28,10 +29,10 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Obtém as preferências do usuário
-        SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
 
         // Define o idioma com base nas preferências
-        super.setLocale(preferences.getString("language", "pt"));
+        super.setLocale(preferences.getString(Constants.KEY_LANGUAGE, Constants.DEFAULT_LANGUAGE));
 
         super.onCreate(savedInstanceState);
 
@@ -64,11 +65,11 @@ public class SettingsActivity extends BaseActivity {
      */
     private void setupThemeSwitch(SharedPreferences preferences) {
         MaterialSwitch themeSwitch = findViewById(R.id.themeSwitch);
-        themeSwitch.setChecked(preferences.getBoolean("dark_mode", false));
+        themeSwitch.setChecked(preferences.getBoolean(Constants.KEY_DARK_MODE, false));
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Salva a preferência de tema
-            preferences.edit().putBoolean("dark_mode", isChecked).apply();
+            preferences.edit().putBoolean(Constants.KEY_DARK_MODE, isChecked).apply();
 
             // Aplica o tema selecionado
             AppCompatDelegate.setDefaultNightMode(
@@ -83,8 +84,8 @@ public class SettingsActivity extends BaseActivity {
     public void onLanguageClick(View view) {
         String[] languages = getResources().getStringArray(R.array.languages);
         String[] languageCodes = getResources().getStringArray(R.array.language_codes);
-        SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
-        String currentLanguage = preferences.getString("language", "pt");
+        SharedPreferences preferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        String currentLanguage = preferences.getString(Constants.KEY_LANGUAGE, Constants.DEFAULT_LANGUAGE);
         int checkedItem = java.util.Arrays.asList(languageCodes).indexOf(currentLanguage);
 
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
@@ -92,7 +93,7 @@ public class SettingsActivity extends BaseActivity {
                 .setSingleChoiceItems(languages, checkedItem, (dialog, which) -> {
                     // Salva o idioma selecionado
                     String selectedLanguage = languageCodes[which];
-                    preferences.edit().putString("language", selectedLanguage).apply();
+                    preferences.edit().putString(Constants.KEY_LANGUAGE, selectedLanguage).apply();
 
                     // Reinicia o aplicativo para aplicar o idioma
                     restartApp();
