@@ -256,9 +256,9 @@ public class MainActivity extends BaseActivity {
         popupMenu.getMenu().add(R.string.delete);
 
         popupMenu.setOnMenuItemClickListener(item -> {
-            if (item.getTitle().equals(R.string.edit)) {
+            if (item.getTitle().equals(getString(R.string.edit))) {
                 showEditTaskDialog(taskId, currentDescription);
-            } else if (item.getTitle().equals(R.string.delete)) {
+            } else if (item.getTitle().equals(getString(R.string.delete))) {
                 deleteTaskFromDatabase(taskId);
             }
             return true;
