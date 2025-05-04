@@ -16,7 +16,6 @@ public final class DatabaseContract {
      * Classe interna que define a tabela "Tarefas".
      * Implementa BaseColumns para incluir automaticamente a coluna "_ID".
      */
-
     public static class Tabela implements BaseColumns {
         // Nome da tabela
         public static final String NOME_TABELA = "Tarefas";
@@ -27,5 +26,4 @@ public final class DatabaseContract {
         // Nome da coluna que armazena o status da tarefa (Ex.: Concluído ou Pendente)
         public static final String Status = "Status"; // 0 = Pendente, 1 = Concluída
     }
-
 }
